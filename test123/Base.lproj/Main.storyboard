@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDv-k6-zbR">
-                                <rect key="frame" x="135" y="407" width="123" height="39"/>
+                                <rect key="frame" x="110" y="407" width="174" height="39"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Start Service"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Upload a new video"/>
                                 <connections>
                                     <action selector="startService:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Xo-Ba-fUD"/>
                                 </connections>

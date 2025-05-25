@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        registerNotificationCategories()
+
         
         // Register handler for task
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskId, using: nil) {task in
@@ -33,6 +34,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         return true
+    }
+    
+    func registerNotificationCategories() {
+        let category = UNNotificationCategory(
+            identifier: "STICKY_CATEGORY",
+            actions: [],
+            intentIdentifiers: [],
+            options: [.customDismissAction]
+        )
+        UNUserNotificationCenter.current().setNotificationCategories([category])
     }
     
     func scheduleTask() {
@@ -99,4 +110,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-

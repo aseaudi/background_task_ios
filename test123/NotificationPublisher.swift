@@ -9,13 +9,14 @@ import UserNotifications
 
 class NotificationPublisher: NSObject, UNUserNotificationCenterDelegate {
     
-    func sendNotification() {
+    func sendNotification(body: String) {
         
         let content = UNMutableNotificationContent()
         content.title = "My App"
-        content.body = "New task is created"
-        content.subtitle = "New subtitle"
+        content.body = body
         content.sound = .default
+        content.categoryIdentifier = "STICKY_CATEGORY"
+
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(5),repeats: false)
         UNUserNotificationCenter.current().delegate = self
         let request = UNNotificationRequest(identifier: "notification2", content: content, trigger: trigger)
@@ -40,8 +41,8 @@ class NotificationPublisher: NSObject, UNUserNotificationCenterDelegate {
                 print("Notification was dismissed")
                 // Optionally show it again
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                sleep(3)
-                    self.sendNotification()
+                
+                self.sendNotification(body: "Still uploading your video ...")
 //                }
             }
         if response.actionIdentifier == UNNotificationDefaultActionIdentifier {

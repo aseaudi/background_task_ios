@@ -20,9 +20,9 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         // Do any additional setup after loading the view.
         checkForPermission()
         print("got permissions")
-        print("wait 20 seconds")
-        sleep(5)
-        dispatchNotification()
+//        print("wait 20 seconds")
+//        sleep(5)
+//        dispatchNotification()
 //        showProgressNotification()
 //        sleep(30)
 //        removeProgressNotification()
@@ -114,7 +114,7 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         }
     
     @IBAction func startService(_ sender: Any) {
-        notificationPublisher.sendNotification()
+        notificationPublisher.sendNotification(body: "Uploading your video ...")
     }
     
     func didReceiveLocalNotification() {
