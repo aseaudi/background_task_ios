@@ -6,15 +6,64 @@
 //
 
 import UIKit
+import BackgroundTasks
+import UserNotifications
+
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    let taskId = "aseaudi.test123.task"
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        // Register handler for task
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: taskId, using: nil) {task in
+            guard let task = task as? BGAppRefreshTask else { return}
+            self.handleTask(task: task)
+        }
+        let count = UserDefaults.standard.integer(forKey: "task_count")
+        print("Task ran \(count) times")
+        
+        scheduleTask()
+        
+        
         return true
+    }
+    
+    func scheduleTask() {
+        BGTaskScheduler.shared.getPendingTaskRequests { requests in
+            print("\(requests.count) BGTasks pending")
+            guard requests.isEmpty else {
+                return
+            }
+            // Submit task to be scheduled
+            do {
+                let newTask = BGAppRefreshTaskRequest(identifier: self.taskId)
+                newTask.earliestBeginDate = Date().addingTimeInterval(1)
+                try BGTaskScheduler.shared.submit(newTask)
+                print("Task scheduled")
+            } catch {
+                print("Task failed to schedule \(error)")
+            }
+
+        }
+    }
+    
+    func handleTask(task: BGAppRefreshTask) {
+        let count = UserDefaults.standard.integer(forKey: "task_count")
+        UserDefaults.standard.set(count + 1, forKey: "task_count")
+        showProgressNotification()
+        sleep(10)
+        removeProgressNotification()
+        task.expirationHandler = {
+            // pass
+        }
+        task.setTaskCompleted(success: true)
     }
 
     // MARK: UISceneSession Lifecycle
@@ -30,6 +79,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+    func showProgressNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Processing..."
+        content.body = "Your background task is running."
+        content.sound = .default
+        content.categoryIdentifier = "TASK_PROGRESS"
+
+        let request = UNNotificationRequest(identifier: "task_progress", content: content, trigger: nil)
+
+        UNUserNotificationCenter.current().add(request)
+    }
+
+    func removeProgressNotification() {
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ["task_progress"])
+    }
+    
 
 
 }
